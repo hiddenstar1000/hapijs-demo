@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc && shx cp package.json dist",
-    "start": "npm run build && node dist/server.js",
-    "dev": "nodemon dist/server.js",
+    "start": "npm run build && node dist",
+    "dev": "nodemon dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "hapi": "^18.1.0"
+    "hapi": "^18.1.0",
+    "mongoose": "^5.4.19"
   },
   "devDependencies": {
     "@types/node": "^11.11.0",
