@@ -2,11 +2,11 @@
   "name": "hapijs-demo",
   "version": "1.0.0",
   "description": "Hapijs Demo",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "build": "tsc && shx cp package.json dist",
-    "start": "npm run build && node dist/server.js",
-    "dev": "nodemon dist/server.js",
+    "start": "npm run build && node dist",
+    "dev": "nodemon dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
