@@ -1,33 +1,47 @@
 import { Server } from 'hapi';
+import * as mongoose from 'mongoose';
 
-// Create a server with a host and port
-const server = Server({
-    host: 'localhost',
-    port: 8000
-});
+export class APIServer {
+    private server: Server;
 
-// Add the route
-server.route({
-    method: 'GET',
-    path: '/hello',
-    handler: function (request, h) {
+    constructor() {
+        mongoose.connect(
+            'mongodb://demo:demo123@ds021984.mlab.com:21984/hapijs-demo',
+            { useNewUrlParser: true }
+        );
 
-        return 'hello world';
-    }
-});
+        mongoose.connection.on('connected', () => {
+            console.log('Connected to MongoDB');
+        });
 
-// Start the server
-const start = async function () {
-
-    try {
-        await server.start();
-    }
-    catch (err) {
-        console.log(err);
-        process.exit(1);
+        mongoose.connection.on('error', () => {
+            console.log('Error while conneting to MongoDB');
+        });
     }
 
-    console.log('Server running at:', server.info.uri);
-};
+    public async init() {
+        // Create a server with a host and port
+        this.server = Server({
+            host: 'localhost',
+            port: 8000
+        });
 
-start();
+        // Add the route
+        this.server.route({
+            method: 'GET',
+            path: '/hello',
+            handler: function (request, h) {
+                return 'hello world';
+            }
+        });
+
+        try {
+            await this.server.start();
+        } catch (err) {
+            console.log(err);
+            process.exit(1);
+        }
+
+        console.log('Server running at:', this.server.info.uri);
+    }
+}
