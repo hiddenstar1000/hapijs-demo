@@ -1,5 +1,6 @@
 import { Server } from 'hapi';
 import * as mongoose from 'mongoose';
+import { UserController } from './controllers/UserController';
 
 export class APIServer {
     private server: Server;
@@ -29,11 +30,14 @@ export class APIServer {
         // Add the route
         this.server.route({
             method: 'GET',
-            path: '/hello',
-            handler: function (request, h) {
-                return 'hello world';
+            path: '/',
+            handler: (request, h) => {
+                return 'Hapi.js Demo API';
             }
         });
+
+        const userController = new UserController();
+        this.server.route(userController.getRouteList());
 
         try {
             await this.server.start();
