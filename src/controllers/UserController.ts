@@ -48,8 +48,11 @@ export class UserController {
                 path: '/user/{id}',
                 handler: async (request, h) => {
                     const user = await User.findById(request.params.id);
-
-                    return h.response(user).code(200);
+                    if (user) {
+                        return h.response(user).code(200);
+                    } else {
+                        return boom.notFound('user not found');
+                    }
                 }
             }
         }
@@ -90,12 +93,6 @@ export class UserController {
     }
 
     public getRouteList(): any[] {
-        return [
-            this.addEntityRoute(),
-            this.getAllEntitiesRoute(),
-            this.getEntityByIdRoute(),
-            this.updateEntityByIdRoute(),
-            this.deleteEntityByIdRoute()
-        ];
+        return [this.addEntityRoute(), this.getAllEntitiesRoute(), this.getEntityByIdRoute(), this.updateEntityByIdRoute(), this.deleteEntityByIdRoute()];
     }
 }
