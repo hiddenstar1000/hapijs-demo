@@ -1,21 +1,24 @@
 import * as boom from 'boom';
+import { hashSync } from 'bcrypt';
 
 export abstract class BaseController {
     private model: any;
+    protected hashProperty: string;
 
     // POST
-    public addEntityRoute;
+    protected addEntityRoute;
     // GET
-    public getAllEntitiesRoute;
+    protected getAllEntitiesRoute;
     // GET 
-    public getEntityByIdRoute;
+    protected getEntityByIdRoute;
     // PUT
-    public updateEntityByIdRoute;
+    protected updateEntityByIdRoute;
     // DELETE
-    public deleteEntityByIdRoute;
+    protected deleteEntityByIdRoute;
 
     constructor(model: any) {
         this.model = model;
+        this.hashProperty = '';
         this.initBaseRoutes();
     }
 
@@ -24,7 +27,16 @@ export abstract class BaseController {
             return {
                 method: 'POST',
                 path: '/user',
+                config: {
+                    auth: {
+                        strategy: 'jwt'
+                    }
+                },
                 handler: async (request, h) => {
+                    if (this.hashProperty != '' && request.payload[this.hashProperty]) {
+                        request.payload[this.hashProperty] = hashSync(request.payload[this.hashProperty], 5);
+                    }
+
                     const user = await this.model.create(request.payload);
 
                     return h.response({ statusCode: 201, message: 'Successfully Created', 'id': user._id }).code(201);
@@ -36,6 +48,11 @@ export abstract class BaseController {
             return {
                 method: 'GET',
                 path: '/user',
+                config: {
+                    auth: {
+                        strategy: 'jwt'
+                    }
+                },
                 handler: async (request, h) => {
                     const users = await this.model.find({});
 
@@ -48,6 +65,11 @@ export abstract class BaseController {
             return {
                 method: 'GET',
                 path: '/user/{id}',
+                config: {
+                    auth: {
+                        strategy: 'jwt'
+                    }
+                },
                 handler: async (request, h) => {
                     const user = await this.model.findById(request.params.id);
                     if (user) {
@@ -63,9 +85,18 @@ export abstract class BaseController {
             return {
                 method: 'PUT',
                 path: '/user/{id}',
+                config: {
+                    auth: {
+                        strategy: 'jwt'
+                    }
+                },
                 handler: async (request, h) => {
                     const user = await this.model.findById(request.params.id);
                     if (user) {
+                        if (this.hashProperty != '' && request.payload[this.hashProperty]) {
+                            request.payload[this.hashProperty] = hashSync(request.payload[this.hashProperty], 5);
+                        }
+
                         await this.model.findByIdAndUpdate(request.params.id, request.payload);
 
                         return h.response({ statusCode: 200, message: 'Successfully Updated' }).code(200);
@@ -80,6 +111,11 @@ export abstract class BaseController {
             return {
                 method: 'DELETE',
                 path: '/user/{id}',
+                config: {
+                    auth: {
+                        strategy: 'jwt'
+                    }
+                },
                 handler: async (request, h) => {
                     const user = await this.model.findById(request.params.id);
                     if (user) {

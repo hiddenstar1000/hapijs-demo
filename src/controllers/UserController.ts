@@ -4,6 +4,7 @@ import { User } from "../models/userModel";
 export class UserController extends BaseController {
     constructor() {
         super(User);
+        this.hashProperty = 'password';
     }
 
     public getRouteList(): any[] {
