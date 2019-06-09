@@ -23,13 +23,14 @@ export abstract class BaseController {
     }
 
     private initBaseRoutes(): void {
-        this.addEntityRoute = () => {
+        this.addEntityRoute = (scope: string[]) => {
             return {
                 method: 'POST',
                 path: '/user',
                 config: {
                     auth: {
-                        strategy: 'jwt'
+                        strategy: 'jwt',
+                        scope: scope
                     }
                 },
                 handler: async (request, h) => {
@@ -44,13 +45,14 @@ export abstract class BaseController {
             }
         }
 
-        this.getAllEntitiesRoute = () => {
+        this.getAllEntitiesRoute = (scope: string[]) => {
             return {
                 method: 'GET',
                 path: '/user',
                 config: {
                     auth: {
-                        strategy: 'jwt'
+                        strategy: 'jwt',
+                        scope: scope
                     }
                 },
                 handler: async (request, h) => {
@@ -61,13 +63,14 @@ export abstract class BaseController {
             }
         }
 
-        this.getEntityByIdRoute = () => {
+        this.getEntityByIdRoute = (scope: string[]) => {
             return {
                 method: 'GET',
                 path: '/user/{id}',
                 config: {
                     auth: {
-                        strategy: 'jwt'
+                        strategy: 'jwt',
+                        scope: scope
                     }
                 },
                 handler: async (request, h) => {
@@ -81,13 +84,14 @@ export abstract class BaseController {
             }
         }
 
-        this.updateEntityByIdRoute = () => {
+        this.updateEntityByIdRoute = (scope: string[]) => {
             return {
                 method: 'PUT',
                 path: '/user/{id}',
                 config: {
                     auth: {
-                        strategy: 'jwt'
+                        strategy: 'jwt',
+                        scope: scope
                     }
                 },
                 handler: async (request, h) => {
@@ -107,13 +111,14 @@ export abstract class BaseController {
             }
         }
 
-        this.deleteEntityByIdRoute = () => {
+        this.deleteEntityByIdRoute = (scope: string[]) => {
             return {
                 method: 'DELETE',
                 path: '/user/{id}',
                 config: {
                     auth: {
-                        strategy: 'jwt'
+                        strategy: 'jwt',
+                        scope: scope
                     }
                 },
                 handler: async (request, h) => {
