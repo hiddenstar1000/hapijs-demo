@@ -1,6 +1,8 @@
-import { Server } from 'hapi';
+import { Server } from '@hapi/hapi';
 import * as mongoose from 'mongoose';
 import { UserController } from './controllers/UserController';
+import { LoginController } from './controllers/LoginController';
+import { User } from './models/userModel';
 
 export class APIServer {
     private server: Server;
@@ -27,6 +29,16 @@ export class APIServer {
             port: 8000
         });
 
+        await this.server.register(require('hapi-auth-jwt2'));
+
+        this.server.auth.strategy('jwt', 'jwt', {
+            key: 'privateKey123',
+            validate: this.validate,
+            verifyOptions: {
+                algorithms: ['HS256']
+            }
+        });
+
         // Add the route
         this.server.route({
             method: 'GET',
@@ -39,6 +51,27 @@ export class APIServer {
         const userController = new UserController();
         this.server.route(userController.getRouteList());
 
+        const loginController = new LoginController();
+        this.server.route(loginController.getRouteList());
+
+        this.server.events.on('request', (request, event, tags) => {
+            if (tags.error) {
+                console.log(
+                    `Request ${event.request} error: ${
+                    event.error ? event.error.message : 'unknown'
+                    }`
+                );
+            }
+        });
+
+        this.server.events.on('response', (request) => {
+            console.log(`Response sent for request: ${request.info.id}`);
+        });
+
+        this.server.events.on('stop', () => {
+            console.log('Server stopped');
+        });
+
         try {
             await this.server.start();
         } catch (err) {
@@ -47,5 +80,15 @@ export class APIServer {
         }
 
         console.log('Server running at:', this.server.info.uri);
+    }
+
+    private validate = async function (decoded, request, h) {
+        const user = await User.findById(decoded.id);
+
+        if (user) {
+            return { isValid: true };
+        }
+
+        return { isValid: false };
     }
 }
