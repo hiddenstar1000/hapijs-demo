@@ -3,6 +3,8 @@ import { hashSync } from 'bcrypt';
 
 export abstract class BaseController {
     private model: any;
+    protected entitySingular: string;
+    protected entityPlural: string;
     protected hashProperty: string;
 
     // POST
@@ -18,6 +20,8 @@ export abstract class BaseController {
 
     constructor(model: any) {
         this.model = model;
+        this.entitySingular = 'entity';
+        this.entityPlural = 'entities';
         this.hashProperty = '';
         this.initBaseRoutes();
     }
@@ -31,6 +35,18 @@ export abstract class BaseController {
                     auth: {
                         strategy: 'jwt',
                         scope: scope
+                    },
+                    description: 'Endpoint used to create ' + this.entitySingular,
+                    notes: 'Endpoint used to create ' + this.entitySingular,
+                    tags: ['api', 'v1'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                '201': {
+                                    description: 'Created'
+                                }
+                            }
+                        }
                     }
                 },
                 handler: async (request, h) => {
@@ -53,6 +69,18 @@ export abstract class BaseController {
                     auth: {
                         strategy: 'jwt',
                         scope: scope
+                    },
+                    description: 'Endpoint used to get ' + this.entityPlural,
+                    notes: 'Endpoint used to get ' + this.entityPlural,
+                    tags: ['api', 'v1'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                '200': {
+                                    description: 'Success'
+                                }
+                            }
+                        }
                     }
                 },
                 handler: async (request, h) => {
@@ -71,6 +99,18 @@ export abstract class BaseController {
                     auth: {
                         strategy: 'jwt',
                         scope: scope
+                    },
+                    description: 'Endpoint used to get ' + this.entitySingular,
+                    notes: 'Endpoint used to get ' + this.entitySingular,
+                    tags: ['api', 'v1'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                '200': {
+                                    description: 'Success'
+                                }
+                            }
+                        }
                     }
                 },
                 handler: async (request, h) => {
@@ -92,6 +132,18 @@ export abstract class BaseController {
                     auth: {
                         strategy: 'jwt',
                         scope: scope
+                    },
+                    description: 'Endpoint used to update ' + this.entitySingular,
+                    notes: 'Endpoint used to update ' + this.entitySingular,
+                    tags: ['api', 'v1'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                '200': {
+                                    description: 'Success'
+                                }
+                            }
+                        }
                     }
                 },
                 handler: async (request, h) => {
@@ -119,6 +171,18 @@ export abstract class BaseController {
                     auth: {
                         strategy: 'jwt',
                         scope: scope
+                    },
+                    description: 'Endpoint used to delete ' + this.entitySingular,
+                    notes: 'Endpoint used to delete ' + this.entitySingular,
+                    tags: ['api', 'v1'],
+                    plugins: {
+                        'hapi-swagger': {
+                            responses: {
+                                '200': {
+                                    description: 'Success'
+                                }
+                            }
+                        }
                     }
                 },
                 handler: async (request, h) => {
