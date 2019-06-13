@@ -4,6 +4,8 @@ import { hashSync } from 'bcrypt';
 export abstract class BaseController {
     private model: any;
     protected hashProperty: string;
+    protected entitySingular: string;
+    protected entityPlural: string;
 
     // POST
     protected addEntityRoute;
@@ -18,6 +20,8 @@ export abstract class BaseController {
 
     constructor(model: any) {
         this.model = model;
+        this.entitySingular = 'entity';
+        this.entityPlural = 'entities';
         this.hashProperty = '';
         this.initBaseRoutes();
     }
@@ -26,7 +30,7 @@ export abstract class BaseController {
         this.addEntityRoute = (scope: string[]) => {
             return {
                 method: 'POST',
-                path: '/user',
+                path: `/${this.entitySingular}`,
                 config: {
                     auth: {
                         strategy: 'jwt',
@@ -48,7 +52,7 @@ export abstract class BaseController {
         this.getAllEntitiesRoute = (scope: string[]) => {
             return {
                 method: 'GET',
-                path: '/user',
+                path: `/${this.entitySingular}`,
                 config: {
                     auth: {
                         strategy: 'jwt',
@@ -66,7 +70,7 @@ export abstract class BaseController {
         this.getEntityByIdRoute = (scope: string[]) => {
             return {
                 method: 'GET',
-                path: '/user/{id}',
+                path: `/${this.entitySingular}/{id}`,
                 config: {
                     auth: {
                         strategy: 'jwt',
@@ -87,7 +91,7 @@ export abstract class BaseController {
         this.updateEntityByIdRoute = (scope: string[]) => {
             return {
                 method: 'PUT',
-                path: '/user/{id}',
+                path: `/${this.entitySingular}/{id}`,
                 config: {
                     auth: {
                         strategy: 'jwt',
@@ -114,7 +118,7 @@ export abstract class BaseController {
         this.deleteEntityByIdRoute = (scope: string[]) => {
             return {
                 method: 'DELETE',
-                path: '/user/{id}',
+                path: `/${this.entitySingular}/{id}`,
                 config: {
                     auth: {
                         strategy: 'jwt',
