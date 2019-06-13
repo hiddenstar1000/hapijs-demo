@@ -4,6 +4,8 @@ import { User } from "../models/userModel";
 export class UserController extends BaseController {
     constructor() {
         super(User);
+        this.entitySingular = 'user';
+        this.entityPlural = 'users';
     }
 
     public getRouteList(): any[] {

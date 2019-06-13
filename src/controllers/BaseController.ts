@@ -2,6 +2,8 @@ import * as boom from 'boom';
 
 export abstract class BaseController {
     private model: any;
+    protected entitySingular: string;
+    protected entityPlural: string;
 
     // POST
     public addEntityRoute;
@@ -16,6 +18,8 @@ export abstract class BaseController {
 
     constructor(model: any) {
         this.model = model;
+        this.entitySingular = 'entity';
+        this.entityPlural = 'entities';
         this.initBaseRoutes();
     }
 
@@ -23,7 +27,7 @@ export abstract class BaseController {
         this.addEntityRoute = () => {
             return {
                 method: 'POST',
-                path: '/user',
+                path: `/${this.entitySingular}`,
                 handler: async (request, h) => {
                     const user = await this.model.create(request.payload);
 
@@ -35,7 +39,7 @@ export abstract class BaseController {
         this.getAllEntitiesRoute = () => {
             return {
                 method: 'GET',
-                path: '/user',
+                path: `/${this.entitySingular}`,
                 handler: async (request, h) => {
                     const users = await this.model.find({});
 
@@ -47,7 +51,7 @@ export abstract class BaseController {
         this.getEntityByIdRoute = () => {
             return {
                 method: 'GET',
-                path: '/user/{id}',
+                path: `/${this.entitySingular}/{id}`,
                 handler: async (request, h) => {
                     const user = await this.model.findById(request.params.id);
                     if (user) {
@@ -62,7 +66,7 @@ export abstract class BaseController {
         this.updateEntityByIdRoute = () => {
             return {
                 method: 'PUT',
-                path: '/user/{id}',
+                path: `/${this.entitySingular}/{id}`,
                 handler: async (request, h) => {
                     const user = await this.model.findById(request.params.id);
                     if (user) {
@@ -79,7 +83,7 @@ export abstract class BaseController {
         this.deleteEntityByIdRoute = () => {
             return {
                 method: 'DELETE',
-                path: '/user/{id}',
+                path: `/${this.entitySingular}/{id}`,
                 handler: async (request, h) => {
                     const user = await this.model.findById(request.params.id);
                     if (user) {
