@@ -6,8 +6,6 @@ export abstract class BaseController {
     protected entitySingular: string;
     protected entityPlural: string;
     protected hashProperty: string;
-    protected entitySingular: string;
-    protected entityPlural: string;
 
     // POST
     protected addEntityRoute;
