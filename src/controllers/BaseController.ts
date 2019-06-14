@@ -41,9 +41,9 @@ export abstract class BaseController {
                         request.payload[this.hashProperty] = hashSync(request.payload[this.hashProperty], 5);
                     }
 
-                    const user = await this.model.create(request.payload);
+                    const entity = await this.model.create(request.payload);
 
-                    return h.response({ statusCode: 201, message: 'Successfully Created', 'id': user._id }).code(201);
+                    return h.response({ statusCode: 201, message: 'Successfully Created', 'id': entity._id }).code(201);
                 }
             }
         }
@@ -58,9 +58,9 @@ export abstract class BaseController {
                     }
                 },
                 handler: async (request, h) => {
-                    const users = await this.model.find({});
+                    const entities = await this.model.find({});
 
-                    return h.response(users).code(200);
+                    return h.response(entities).code(200);
                 }
             }
         }
@@ -75,11 +75,11 @@ export abstract class BaseController {
                     }
                 },
                 handler: async (request, h) => {
-                    const user = await this.model.findById(request.params.id);
-                    if (user) {
-                        return h.response(user).code(200);
+                    const entity = await this.model.findById(request.params.id);
+                    if (entity) {
+                        return h.response(entity).code(200);
                     } else {
-                        return boom.notFound('user not found');
+                        return boom.notFound('entity not found');
                     }
                 }
             }
@@ -95,17 +95,16 @@ export abstract class BaseController {
                     }
                 },
                 handler: async (request, h) => {
-                    const user = await this.model.findById(request.params.id);
-                    if (user) {
+                    const entity = await this.model.findById(request.params.id);
+                    if (entity) {
                         if (this.hashProperty != '' && request.payload[this.hashProperty]) {
                             request.payload[this.hashProperty] = hashSync(request.payload[this.hashProperty], 5);
                         }
-
                         await this.model.findByIdAndUpdate(request.params.id, request.payload);
 
                         return h.response({ statusCode: 200, message: 'Successfully Updated' }).code(200);
                     } else {
-                        return boom.notFound('user not found');
+                        return boom.notFound('entity not found');
                     }
                 }
             }
@@ -121,13 +120,13 @@ export abstract class BaseController {
                     }
                 },
                 handler: async (request, h) => {
-                    const user = await this.model.findById(request.params.id);
-                    if (user) {
+                    const entity = await this.model.findById(request.params.id);
+                    if (entity) {
                         await this.model.findByIdAndDelete(request.params.id);
 
                         return h.response({ statusCode: 200, message: 'Successfully Deleted' }).code(200);
                     } else {
-                        return boom.notFound('user not found');
+                        return boom.notFound('entity not found');
                     }
                 }
             }
