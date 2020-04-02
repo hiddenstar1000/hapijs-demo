@@ -1,25 +1,14 @@
 import { Server } from '@hapi/hapi';
-import * as mongoose from 'mongoose';
 import { UserController } from './controllers/UserController';
 import { LoginController } from './controllers/LoginController';
 import { User } from './models/userModel';
+import { Connection, createConnection } from 'typeorm';
 
 export class APIServer {
     private server: Server;
+    private databaseConnection: Connection;
 
     constructor() {
-        mongoose.connect(
-            'mongodb://demo:demo123@ds021984.mlab.com:21984/hapijs-demo',
-            { useNewUrlParser: true }
-        );
-
-        mongoose.connection.on('connected', () => {
-            console.log('Connected to MongoDB');
-        });
-
-        mongoose.connection.on('error', () => {
-            console.log('Error while conneting to MongoDB');
-        });
     }
 
     public async init() {
@@ -43,6 +32,8 @@ export class APIServer {
                 algorithms: ['HS256']
             }
         });
+
+        await this.connectDatabase();
 
         // Add the route
         this.server.route({
@@ -88,12 +79,33 @@ export class APIServer {
     }
 
     private validate = async function (decoded, request, h) {
-        const user = await User.findById(decoded.id);
+        // const user = await User.findById(decoded.id);
 
-        if (user) {
-            return { isValid: true };
-        }
+        // if (user) {
+        //     return { isValid: true };
+        // }
 
-        return { isValid: false };
+        return { isValid: true };
     }
+
+    private async connectDatabase() {
+        try {
+          this.databaseConnection = await createConnection({
+            type: 'mysql',
+            host: 'localhost',
+            port: 3306,
+            username: 'root',
+            password: '',
+            database: 'hapijs-demo',
+            entities: [
+                User
+            ],
+            synchronize: true,
+          });
+    
+          console.log('Connected to database');
+        } catch (error) {
+          console.log('Database connection error');
+        }
+      }
 }

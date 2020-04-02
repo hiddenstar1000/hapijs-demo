@@ -32,30 +32,30 @@ export class LoginController {
                     }
                 },
                 handler: async (request, h) => {
-                    const user = await User.findOne({email: request.payload.email});
+                    // const user = await User.findOne({email: request.payload.email});
 
-                    if (user && compareSync(request.payload.password, user.password)) {
-                        const expirationTime: number = 60 * 60 * 24 * 7; // 1 week
-                        const tokenData = {
-                            id: user._id,
-                            email: user.email,
-                            name: user.name,
-                            scope: user.role,
-                            exp: Math.floor(Date.now() / 1000) + expirationTime
-                        };
+                    // if (user && compareSync(request.payload.password, user.password)) {
+                    //     const expirationTime: number = 60 * 60 * 24 * 7; // 1 week
+                    //     const tokenData = {
+                    //         id: user._id,
+                    //         email: user.email,
+                    //         name: user.name,
+                    //         scope: user.role,
+                    //         exp: Math.floor(Date.now() / 1000) + expirationTime
+                    //     };
 
-                        return h.response({ 
-                            statusCode: 200,
-                            message: 'Successfully Authenticated',
-                            user: {
-                                id: user._id,
-                                email: user.email,
-                                name: user.name,
-                                token: jwt.sign(tokenData, 'privateKey123', { algorithm: 'HS256' })
-                            } 
-                        })
-                        .code(200);
-                    }
+                    //     return h.response({ 
+                    //         statusCode: 200,
+                    //         message: 'Successfully Authenticated',
+                    //         user: {
+                    //             id: user._id,
+                    //             email: user.email,
+                    //             name: user.name,
+                    //             token: jwt.sign(tokenData, 'privateKey123', { algorithm: 'HS256' })
+                    //         } 
+                    //     })
+                    //     .code(200);
+                    // }
 
                     return boom.unauthorized('Invalid email or password');
                 }

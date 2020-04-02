@@ -19,7 +19,9 @@
     "boom": "^7.3.0",
     "hapi-auth-jwt2": "^8.6.1",
     "hapi-swagger": "^10.0.2",
-    "mongoose": "^5.4.19"
+    "mysql2": "^2.1.0",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.24"
   },
   "devDependencies": {
     "@types/node": "^11.11.0",
